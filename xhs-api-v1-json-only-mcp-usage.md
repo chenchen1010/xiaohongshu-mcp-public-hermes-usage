@@ -176,6 +176,35 @@ python .\mcp\xhs-api-v1-server\server.py
 
 返回结果中会包含 `records` 和 `billing`。通常任务完成时已经按生成的可计费 records 数量结算；重复读取不会重复扣费。
 
+如果是店铺链接任务，系统会在进入店铺主页后尝试读取店铺头部的“最近更新情况”。读取成功时，每条返回的商品 record 会在 `seller` 里带上店铺级笔记更新信息：
+
+```json
+{
+  "records": [
+    {
+      "seller": {
+        "id": "67e3d05e0504a20015017f35",
+        "name": "大凉山艾旗舰店",
+        "recent_note_update": {
+          "text": "昨天更新 2 篇笔记 >",
+          "note_count": 2,
+          "recency_text": "昨天更新",
+          "linked_user_url": "https://www.xiaohongshu.com/user/profile/..."
+        },
+        "linked_user_url": "https://www.xiaohongshu.com/user/profile/..."
+      }
+    }
+  ]
+}
+```
+
+说明：
+
+- `recent_note_update.text` 是店铺主页原始展示文本，例如 `昨天更新 2 篇笔记 >` 或 `0篇笔记 >`。
+- `recent_note_update.note_count` 是解析出的笔记数量。
+- `linked_user_url` 是尽力解析字段：如果点击“最近更新情况”后小红书界面暴露绑定账号 ID，就返回账号主页链接；否则可能为空或不返回。
+- 老版本调用方可以忽略这些新增字段，不影响原有商品、店铺和计费字段。
+
 ### `writeback_xhs_task`
 
 可选。回传下游系统写入结果。它不决定扣费，也不会对已结算任务重复扣费。

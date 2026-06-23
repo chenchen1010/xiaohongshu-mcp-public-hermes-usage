@@ -1,6 +1,6 @@
-# 小红书 MCP 公网调用说明（外部 Hermes 用户）
+# 小红书笔记采集 / 笔记评论采集 MCP 公网调用说明
 
-这份文档给外部 Hermes / Codex 用户使用。你只需要配置公网 MCP 地址和 API key，然后通过 MCP tool 调用小红书只读采集能力。
+这份文档给外部 Hermes / Codex 用户使用。你只需要配置公网 MCP 地址和 API key，然后通过 MCP tool 调用小红书笔记采集、笔记详情读取和笔记评论采集能力。
 
 这个服务背后连接真实 Android 手机和小红书 App。所有用户共享同一台手机资源，所以采集任务会串行执行，请不要并发压测或批量长时间抓取。
 
@@ -434,4 +434,4 @@ get_user_profile 可返回用户主页并正常扣费
 
 ## 相关文档
 
-- API v1 JSON-only MCP wrapper 接入说明：[`xhs-api-v1-json-only-mcp-usage.md`](./xhs-api-v1-json-only-mcp-usage.md)
+- 电商采集 API v1 JSON-only MCP wrapper 接入说明：[`xhs-api-v1-json-only-mcp-usage.md`](./xhs-api-v1-json-only-mcp-usage.md)

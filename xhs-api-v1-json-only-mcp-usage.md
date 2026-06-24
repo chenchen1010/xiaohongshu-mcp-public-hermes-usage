@@ -182,6 +182,15 @@ python .\mcp\xhs-api-v1-server\server.py
 {
   "records": [
     {
+      "seller_recent_note_update": {
+        "text": "昨天更新 2 篇笔记 >",
+        "note_count": 2,
+        "recency_text": "昨天更新",
+        "linked_user_url": "https://www.xiaohongshu.com/user/profile/...",
+        "status": "extracted"
+      },
+      "seller_note_extraction_status": "extracted",
+      "seller_linked_user_url": "https://www.xiaohongshu.com/user/profile/...",
       "seller": {
         "id": "67e3d05e0504a20015017f35",
         "name": "大凉山艾旗舰店",
@@ -206,6 +215,7 @@ python .\mcp\xhs-api-v1-server\server.py
 - `recent_note_update.note_count` 是解析出的笔记数量，也兼容店铺页只显示 `154篇` 这种数量徽标的情况。
 - `recent_note_update.status` / `seller.note_extraction_status` 表示解析状态，常见值为 `extracted` 或 `not_found`，用于区分“确实没找到”和“字段不存在的旧结果”。
 - `linked_user_url` 是尽力解析字段：如果点击“最近更新情况”后小红书界面暴露绑定账号 ID，就返回账号主页链接；否则可能为空或不返回。
+- 顶级 `seller_recent_note_update`、`seller_note_extraction_status`、`seller_linked_user_url` 是给偏好扁平字段的 agent 使用的 alias，内容和 `seller` 内字段一致。
 - 老版本调用方可以忽略这些新增字段，不影响原有商品、店铺和计费字段。
 
 ### `writeback_xhs_task`

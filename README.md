@@ -1,6 +1,6 @@
-# 小红书笔记采集 / 笔记评论采集 MCP 公网调用说明
+# 小红书 MCP 公网调用说明（外部 Hermes 用户）
 
-这份文档给外部 Hermes / Codex 用户使用。你只需要配置公网 MCP 地址和 API key，然后通过 MCP tool 调用小红书笔记采集、笔记详情读取和笔记评论采集能力。
+这份文档给外部 Hermes / Codex 用户使用。你只需要配置公网 MCP 地址和 API key，然后通过 MCP tool 调用小红书只读采集能力。
 
 这个服务背后连接真实 Android 手机和小红书 App。所有用户共享同一台手机资源，所以采集任务会串行执行，请不要并发压测或批量长时间抓取。
 
@@ -163,6 +163,14 @@ interact_info
 
 `xsec_token` 可选，但建议携带。缺少 `xsec_token` 时，小红书页面可能打不开或返回不稳定。
 
+如果这条笔记带商品组件，`get_note_detail` 的返回里还可能包含：
+
+```text
+commerce_info
+```
+
+这是一个结构化商品信息摘要，用来告诉调用方这是不是商品笔记，以及当前是否解析到了商品组件里的商品 ID、卖家 ID 或商品相关跳转链接。
+
 ### get_note_comments
 
 获取单条笔记评论。
@@ -248,6 +256,74 @@ ok: true
 tool: 工具名
 result_count: 本次返回的数据条数
 items / comments / replies / profiles: 对应结果列表
+```
+
+`items` 里的单条笔记对象，常见字段包括：
+
+```text
+note_id
+xsec_token
+title
+desc
+user
+interact_info
+cover
+image_list
+video
+commerce_info
+```
+
+### commerce_info 字段说明
+
+当笔记带商品组件时，单条 `item` 里可能会出现：
+
+```json
+{
+  "commerce_info": {
+    "is_goods_note": true,
+    "note_attributes": ["goods"],
+    "has_goods_seller": true,
+    "goods_component_types": [
+      "goods_card_v2",
+      "buyable_goods_card_v2"
+    ],
+    "goods_ids": ["669e7927e05f370001167b71"],
+    "seller_ids": ["669e6cb20cddb90015cefeb6"],
+    "commerce_links": [
+      "xhsdiscover://rn/eva-seraph/seller/669e6cb20cddb90015cefeb6/chat?sellerId=669e6cb20cddb90015cefeb6&goodsId=669e7927e05f370001167b71&entry=46"
+    ]
+  }
+}
+```
+
+字段含义：
+
+```text
+is_goods_note: 这条笔记是否被识别为商品笔记
+note_attributes: 小红书原始笔记属性标签；出现 goods 通常表示带商品组件
+has_goods_seller: 是否检测到商品卖家/商品组件信号
+goods_component_types: 当前命中的商品组件类型名称
+goods_ids: 从商品组件 deep link 或相关字段里提取到的商品 ID
+seller_ids: 从商品组件 deep link 或相关字段里提取到的卖家 / 店铺 ID
+commerce_links: 与商品组件相关的跳转链接，通常是 App deep link 或分享链接
+```
+
+使用建议：
+
+```text
+如果只想判断一条笔记是不是商品笔记，优先看 is_goods_note
+如果要拿商品主键，优先使用 goods_ids
+如果要拿店铺 / 卖家主键，优先使用 seller_ids
+如果需要二次解析商品页跳转参数，可以再处理 commerce_links
+```
+
+限制说明：
+
+```text
+不是所有商品笔记都一定能直接提取到 goods_ids
+有些笔记只能识别出它是商品笔记，但没有暴露明确的商品 ID
+goods_ids / seller_ids 只代表当前采集结果里明确可提取的值，不保证完整
+commerce_links 可能是 xhsdiscover://... 这种 App deep link，不一定是网页 URL
 ```
 
 每次响应还会带计费摘要：
@@ -431,7 +507,3 @@ get_homefeed 可返回首页推荐并正常扣费
 get_user_profile 可返回用户主页并正常扣费
 空结果和失败请求不扣费
 ```
-
-## 相关文档
-
-- 电商采集 API v1 JSON-only MCP wrapper 接入说明：[`xhs-api-v1-json-only-mcp-usage.md`](./xhs-api-v1-json-only-mcp-usage.md)

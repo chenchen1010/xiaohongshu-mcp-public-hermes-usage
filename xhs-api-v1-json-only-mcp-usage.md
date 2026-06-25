@@ -73,6 +73,7 @@ https://xhsapi.qwjxqn.xyz
 ```bash
 export XHS_API_BASE_URL="https://xhsapi.qwjxqn.xyz"
 export XHS_API_KEY="xhs_xxx"
+export XHS_API_TIMEOUT_SECONDS="180"
 ```
 
 PowerShell：
@@ -80,9 +81,11 @@ PowerShell：
 ```powershell
 $env:XHS_API_BASE_URL = "https://xhsapi.qwjxqn.xyz"
 $env:XHS_API_KEY = "xhs_xxx"
+$env:XHS_API_TIMEOUT_SECONDS = "180"
 ```
 
 `XHS_API_KEY` 是用户后台生成的 API Key。
+`XHS_API_TIMEOUT_SECONDS` 可选，默认 `180` 秒。商品详情结果可能包含较多图片字段，建议保持 180 秒或更高。
 
 请不要把 API Key 写进公开代码仓库、日志或聊天记录。
 

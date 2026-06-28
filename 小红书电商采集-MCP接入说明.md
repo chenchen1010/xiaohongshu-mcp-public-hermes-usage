@@ -4,6 +4,8 @@
 
 接入后，agent 可以通过 MCP 工具创建商品、店铺或关键词电商采集任务，查询任务状态，读取 JSON 商品 records，并可选回传下游系统写入情况。
 
+如果你要采集普通小红书笔记、笔记详情、评论或二级回复，请使用[小红书笔记和评论采集 MCP 接入说明](./小红书笔记和评论采集-MCP接入说明.md)。
+
 公开 GitHub 文档仓库：
 
 ```text
@@ -13,10 +15,10 @@ https://github.com/chenchen1010/xiaohongshu-mcp-public-hermes-usage
 公开 GitHub 文档文件：
 
 ```text
-https://github.com/chenchen1010/xiaohongshu-mcp-public-hermes-usage/blob/main/xhs-api-v1-json-only-mcp-usage.md
+https://github.com/chenchen1010/xiaohongshu-mcp-public-hermes-usage/blob/main/小红书电商采集-MCP接入说明.md
 ```
 
-后续如果本地文档 `docs/mcp-xhs-api-v1-usage.md` 有更新，需要同步推送到该 GitHub 仓库的 `xhs-api-v1-json-only-mcp-usage.md` 文件。不要覆盖仓库原有 `README.md`。
+后续如果本地文档 `docs/mcp-xhs-api-v1-usage.md` 有更新，需要同步推送到该 GitHub 仓库的 `小红书电商采集-MCP接入说明.md` 文件。仓库根目录 `README.md` 只作为两类 MCP 接入说明的目录入口。
 
 ## 1. 用户后台、API Key 和充值
 
